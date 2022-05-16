@@ -20,25 +20,37 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var slider: UISlider!
 
+    private var viewWidth: CGFloat = 0.0 {
+        didSet {
+            progressWidth = viewWidth - (CGFloat(slider.value)*viewWidth)
+        }
+    }
+    private var progressWidth: CGFloat = 0.0 {
+        didSet {
+            progressViewTrailingConstraint.constant = progressWidth
+            backgroundProgressTrailingConstraint.constant = progressWidth
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        slider.minimumValue = 0.0
-        slider.maximumValue = Float(self.view.frame.width)
+        viewWidth = self.view.bounds.width
 
-        progressViewTrailingConstraint.constant = view.frame.width
-        backgroundProgressTrailingConstraint.constant = view.frame.width
+        slider.value = 0.0
+        slider.minimumValue = 0.0
+        slider.maximumValue = 1.0
 
         progressView.mask = maskLabel
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        viewWidth = view.bounds.width
+    }
+
     @IBAction func sliderValueChanged(_ sender: UISlider) {
-        print(sender.value)
-
-        let progressWidth = view.frame.width - CGFloat(sender.value)
-
-        progressViewTrailingConstraint.constant = progressWidth
-        backgroundProgressTrailingConstraint.constant = progressWidth
+        progressWidth = viewWidth - (CGFloat(sender.value)*viewWidth)
 
         view.layoutIfNeeded()
     }
