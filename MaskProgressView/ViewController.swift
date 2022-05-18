@@ -40,13 +40,14 @@ class ViewController: UIViewController {
         slider.value = 0.0
         slider.minimumValue = 0.0
         slider.maximumValue = 1.0
+        progressWidth = viewWidth - (CGFloat(slider.value)*viewWidth)
 
         progressView.mask = maskLabel
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        viewWidth = view.bounds.width
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        viewWidth = size.width
     }
 
     @IBAction func sliderValueChanged(_ sender: UISlider) {
